@@ -1,0 +1,76 @@
+import java.util.*;
+
+public class Solution {
+
+    public static void bfs(int n, int m, int[][] edges, int s) {
+
+        // Create adjacency list
+        List<List<Integer>> graph = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Add edges (undirected)
+        for (int i = 0; i < m; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        // Distance array
+        int[] dist = new int[n + 1];
+        Arrays.fill(dist, -1);
+
+        // BFS
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(s);
+        dist[s] = 0;
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+
+            for (int neighbor : graph.get(node)) {
+                if (dist[neighbor] == -1) {
+                    dist[neighbor] = dist[node] + 6;
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // Print result excluding start node
+        for (int i = 1; i <= n; i++) {
+            if (i != s) {
+                System.out.print(dist[i] + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int q = sc.nextInt(); // number of queries
+
+        while (q-- > 0) {
+
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+
+            int[][] edges = new int[m][2];
+
+            for (int i = 0; i < m; i++) {
+                edges[i][0] = sc.nextInt();
+                edges[i][1] = sc.nextInt();
+            }
+
+            int s = sc.nextInt();
+
+            bfs(n, m, edges, s);
+        }
+
+        sc.close();
+    }
+}
